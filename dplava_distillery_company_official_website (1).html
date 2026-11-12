@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPLAVA Distillery Company | God's Island Signature</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cinzel & Playfair Display untuk kesan klasik mewah, Plus Jakarta Sans untuk keterbacaan -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0A0908',
+                        charcoal: '#141210',
+                        amberGold: '#D4AF37',
+                        copper: '#B87333',
+                        parchment: '#F4EFE6',
+                        mutedGold: '#9A8245'
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Kustomisasi Scrollbar & Efek Emas */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0908;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3d311a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA7C11 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-border-glow {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.12);
+        }
+        .bottle-backdrop {
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.18) 0%, rgba(10, 9, 8, 0) 70%);
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-parchment font-sans antialiased selection:bg-amberGold selection:text-obsidian overflow-x-hidden">
+
+    <!-- MODAL VERIFIKASI USIA (21+ LEGAL REQUIREMENT) -->
+    <div id="ageGateModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4 transition-opacity duration-500">
+        <div class="max-w-md w-full bg-charcoal border border-amberGold/40 rounded-2xl p-8 text-center gold-border-glow relative overflow-hidden">
+            <!-- Ornamen Sudut -->
+            <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-amberGold/30 rounded-tl-2xl"></div>
+            <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-amberGold/30 rounded-br-2xl"></div>
+
+            <!-- Logo SVG / Custom -->
+            <div class="mx-auto w-20 h-20 mb-4 flex items-center justify-center">
+                <!-- Ganti src dengan 'Logo putih.png' saat di-hosting -->
+                <img src="Logo putih.png" alt="DPLAVA Logo" class="max-h-16 object-contain" onerror="this.style.display='none'; document.getElementById('fallbackLogoModal').style.display='flex';">
+                <div id="fallbackLogoModal" class="hidden flex-col items-center">
+                    <i class="fa-solid fa-feather-pointed text-3xl text-amberGold mb-1"></i>
+                    <span class="font-cinzel font-bold tracking-widest text-lg text-white">DPLAVA</span>
+                </div>
+            </div>
+
+            <p class="text-xs uppercase tracking-[0.25em] text-amberGold mb-2">God's Island Signature</p>
+            <h2 class="font-cinzel text-2xl font-bold text-white mb-3">Verifikasi Usia</h2>
+            <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+                Produk kami mengandung alkohol (40% ABV) dan ditujukan secara eksklusif bagi Anda yang telah berusia legal. Apakah Anda berusia <strong class="text-parchment">21 tahun atau lebih</strong>?
+            </p>
+
+            <div id="ageErrorMsg" class="hidden mb-4 p-3 rounded-lg bg-red-950/60 border border-red-500/50 text-red-200 text-xs">
+                Maaf, sesuai peraturan yang berlaku di Indonesia, Anda harus berusia minimal 21 tahun untuk mengakses situs ini.
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button onclick="verifyAge(true)" class="w-full sm:w-1/2 py-3 px-5 bg-gradient-to-r from-amberGold to-yellow-600 text-obsidian font-semibold rounded-xl hover:brightness-110 transition cursor-pointer shadow-lg shadow-amberGold/20">
+                    Ya, Saya 21+
+                </button>
+                <button onclick="verifyAge(false)" class="w-full sm:w-1/2 py-3 px-5 bg-transparent border border-gray-600 text-gray-300 font-medium rounded-xl hover:border-gray-400 hover:text-white transition cursor-pointer">
+                    Belum 21 Tahun
+                </button>
+            </div>
+            <p class="text-[11px] text-gray-500 mt-6">Nikmati secara bertanggung jawab. Dilarang dikonsumsi oleh wanita hamil.</p>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="fixed top-0 w-full z-40 bg-obsidian/85 backdrop-blur-md border-b border-amberGold/15 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Brand Logo -->
+                <a href="#home" class="flex items-center gap-3 group">
+                    <img src="Logo putih.png" alt="DPLAVA Distillery Company" class="h-11 object-contain transition transform group-hover:scale-105" onerror="this.style.display='none'; document.getElementById('navFallbackLogo').style.display='flex';">
+                    <div id="navFallbackLogo" class="hidden items-center gap-2">
+                        <i class="fa-solid fa-feather-pointed text-2xl text-amberGold"></i>
+                        <div>
+                            <span class="font-cinzel font-bold text-xl tracking-[0.2em] text-white block leading-none">DPLAVA</span>
+                            <span class="text-[9px] tracking-[0.3em] text-amberGold uppercase block mt-1">Distillery Company</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-8 text-sm tracking-wider uppercase">
+                    <a href="#warisan" class="text-gray-300 hover:text-amberGold transition">Warisan Bali</a>
+                    <a href="#koleksi" class="text-gray-300 hover:text-amberGold transition">Koleksi Spirit</a>
+                    <a href="#koktail" class="text-gray-300 hover:text-amberGold transition">Saran Penyajian</a>
+                    <a href="#kemitraan" class="px-5 py-2.5 rounded-full border border-amberGold text-amberGold hover:bg-amberGold hover:text-obsidian font-medium transition">
+                        Pesan & Kemitraan
+                    </a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-parchment hover:text-amberGold p-2 focus:outline-none">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-charcoal border-b border-amberGold/20 px-6 py-5 space-y-4">
+            <a href="#warisan" onclick="toggleMobileMenu()" class="block text-sm uppercase tracking-wider text-gray-300 hover:text-amberGold">Warisan Bali</a>
+            <a href="#koleksi" onclick="toggleMobileMenu()" class="block text-sm uppercase tracking-wider text-gray-300 hover:text-amberGold">Koleksi Spirit</a>
+            <a href="#koktail" onclick="toggleMobileMenu()" class="block text-sm uppercase tracking-wider text-gray-300 hover:text-amberGold">Saran Penyajian</a>
+            <a href="#kemitraan" onclick="toggleMobileMenu()" class="block text-center py-3 rounded-xl bg-amberGold text-obsidian font-semibold text-sm uppercase tracking-wider">Pesan & Kemitraan</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
+        <!-- Ambient Background Glow -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amberGold/10 rounded-full blur-[130px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Copy -->
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-charcoal border border-amberGold/30 mb-6">
+                        <i class="fa-solid fa-feather-pointed text-amberGold text-xs"></i>
+                        <span class="text-xs uppercase tracking-[0.25em] text-amberGold font-medium">Hand Made From Distiller Island</span>
+                    </div>
+
+                    <h1 class="font-cinzel text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white mb-6">
+                        Jiwa Pulau Dewata dalam Setiap <span class="gold-gradient-text italic font-playfair font-normal">Tetes Distilasi</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-gray-300/90 max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed font-light">
+                        Diracik secara artisan di Badung, Bali oleh <span class="text-parchment font-medium">UD. Tri Hita Karya</span>. DPLAVA menghadirkan karakter spirit lokal kelas dunia dengan kekayaan rempah nusantara dan kehangatan tradisi distilasi otentik.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="#koleksi" class="px-8 py-4 rounded-xl bg-gradient-to-r from-amberGold to-yellow-600 text-obsidian font-semibold tracking-wide hover:brightness-110 transition shadow-lg shadow-amberGold/20 text-center">
+                            Jelajahi Koleksi Kami
+                        </a>
+                        <a href="#warisan" class="px-8 py-4 rounded-xl bg-charcoal border border-amberGold/30 text-parchment hover:border-amberGold transition text-center">
+                            Kisah Penyulingan
+                        </a>
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div class="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-white/10 max-w-lg mx-auto lg:mx-0">
+                        <div>
+                            <p class="font-cinzel text-2xl font-bold text-amberGold">40%</p>
+                            <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">Alcohol By Vol</p>
+                        </div>
+                        <div>
+                            <p class="font-cinzel text-2xl font-bold text-amberGold">750 ML</p>
+                            <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">Artisan Bottle</p>
+                        </div>
+                        <div>
+                            <p class="font-cinzel text-2xl font-bold text-amberGold">BPOM RI</p>
+                            <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">Resmi & Terdaftar</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Showcase (3 Bottles Composition) -->
+                <div class="lg:col-span-5 relative flex justify-center items-end pt-8 lg:pt-0">
+                    <div class="bottle-backdrop absolute inset-0 rounded-full"></div>
+                    <div class="relative flex items-end justify-center gap-2 sm:gap-4 z-10">
+                        <!-- Bottle Left: Black Tea -->
+                        <div class="w-28 sm:w-36 transform -rotate-6 translate-y-4 transition duration-500 hover:rotate-0 hover:-translate-y-2">
+                            <img src="DP BT.jpg" alt="DPLAVA Black Tea" class="w-full h-auto rounded-xl drop-shadow-[0_20px_25px_rgba(0,0,0,0.9)]" onerror="this.src='https://placehold.co/300x650/141210/D4AF37?text=DPLAVA+BLACK+TEA'">
+                        </div>
+                        <!-- Bottle Center: Whisky (Hero) -->
+                        <div class="w-36 sm:w-44 z-20 transform transition duration-500 hover:scale-105">
+                            <img src="DP WH.jpg" alt="DPLAVA Whisky" class="w-full h-auto rounded-xl drop-shadow-[0_25px_35px_rgba(212,175,55,0.25)]" onerror="this.src='https://placehold.co/340x720/141210/D4AF37?text=DPLAVA+WHISKY'">
+                        </div>
+                        <!-- Bottle Right: Spiced Rum -->
+                        <div class="w-28 sm:w-36 transform rotate-6 translate-y-4 transition duration-500 hover:rotate-0 hover:-translate-y-2">
+                            <img src="DP SR.jpg" alt="DPLAVA Spiced Rum" class="w-full h-auto rounded-xl drop-shadow-[0_20px_25px_rgba(0,0,0,0.9)]" onerror="this.src='https://placehold.co/300x650/141210/D4AF37?text=DPLAVA+SPICED+RUM'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WARISAN & FILOSOFI (HERITAGE) -->
+    <section id="warisan" class="py-24 bg-charcoal relative border-y border-amberGold/15">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center mb-16">
+                <span class="text-xs uppercase tracking-[0.3em] text-amberGold font-semibold">God's Island Signature</span>
+                <h2 class="font-cinzel text-3xl sm:text-4xl font-bold text-white mt-3 mb-6">Keahlian Tangan dari Pulau Dewata</h2>
+                <p class="text-gray-300 leading-relaxed font-light">
+                    Terinspirasi oleh filosofi harmoni <span class="text-amberGold italic font-playfair">Tri Hita Karya</span>, setiap botol DPLAVA melewati proses penyulingan presisi di Badung, Bali. Kami memadukan bahan baku pilihan terbaik nusantara untuk menghasilkan karakter rasa yang halus, berani, dan tak terlupakan.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Pillar 1 -->
+                <div class="bg-obsidian/80 border border-amberGold/20 rounded-2xl p-8 hover:border-amberGold/60 transition">
+                    <div class="w-12 h-12 rounded-xl bg-amberGold/10 border border-amberGold/30 flex items-center justify-center text-amberGold mb-6">
+                        <i class="fa-solid fa-fire-flame-curved text-xl"></i>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-semibold text-white mb-3">Small-Batch Distillation</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Disuling dalam skala terkontrol (*hand made*) untuk menjaga kemurnian aroma, keseimbangan rasa, dan standar kualitas tertinggi di setiap tetesnya.
+                    </p>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div class="bg-obsidian/80 border border-amberGold/20 rounded-2xl p-8 hover:border-amberGold/60 transition">
+                    <div class="w-12 h-12 rounded-xl bg-amberGold/10 border border-amberGold/30 flex items-center justify-center text-amberGold mb-6">
+                        <i class="fa-solid fa-leaf text-xl"></i>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-semibold text-white mb-3">Rempah & Botanical Pilihan</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Menggunakan ekstrak daun teh hitam pilihan dan rempah eksotis Indonesia yang menyatu harmonis dengan dasar spirit berkekuatan 40% ABV.
+                    </p>
+                </div>
+
+                <!-- Pillar 3 -->
+                <div class="bg-obsidian/80 border border-amberGold/20 rounded-2xl p-8 hover:border-amberGold/60 transition">
+                    <div class="w-12 h-12 rounded-xl bg-amberGold/10 border border-amberGold/30 flex items-center justify-center text-amberGold mb-6">
+                        <i class="fa-solid fa-award text-xl"></i>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-semibold text-white mb-3">Legalitas & Keaslian</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Diproduksi resmi oleh UD. Tri Hita Karya Badung - Bali dengan nomor registrasi BPOM RI MD, menjamin keamanan serta keaslian produk bagi mitra bisnis maupun penikmat pribadi.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KOLEKSI PRODUK (PRODUCT SHOWCASE) -->
+    <section id="koleksi" class="py-24 bg-obsidian relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs uppercase tracking-[0.3em] text-amberGold font-semibold">The Signature Lineup</span>
+                <h2 class="font-cinzel text-3xl sm:text-4xl font-bold text-white mt-3 mb-4">Koleksi Spirit DPLAVA</h2>
+                <p class="text-gray-400 text-sm sm:text-base">Tiga karakter ikonik yang dirancang untuk dinikmati secara murni (*neat*), dengan es batu (*on the rocks*), maupun sebagai dasar koktail kreatif.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- PRODUK 1: DPLAVA WHISKY -->
+                <div class="group bg-charcoal border border-amberGold/25 rounded-3xl overflow-hidden flex flex-col justify-between hover:border-amberGold transition duration-500 gold-border-glow">
+                    <div class="p-8 pb-0">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="px-3 py-1 rounded-full bg-amberGold/15 text-amberGold text-xs font-semibold tracking-wider">ALC. 40% | 750 ML</span>
+                            <span class="text-xs text-gray-400 font-cinzel">SIGNATURE EDITION</span>
+                        </div>
+                        <div class="relative h-80 flex items-center justify-center my-4 bottle-backdrop rounded-2xl">
+                            <img src="DP WH.jpg" alt="DPLAVA Whisky" class="h-72 object-contain transform group-hover:scale-105 transition duration-500 rounded-lg" onerror="this.src='https://placehold.co/300x550/141210/D4AF37?text=DPLAVA+WHISKY'">
+                        </div>
+                    </div>
+
+                    <div class="p-8 pt-4 bg-gradient-to-t from-black/60 to-transparent">
+                        <h3 class="font-cinzel text-2xl font-bold text-white mb-2">DPLAVA Whisky</h3>
+                        <p class="text-xs text-amberGold uppercase tracking-widest mb-4">Rich • Oaky • Smooth Finish</p>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-6">
+                            Whisky racikan khas Pulau Dewata dengan warna keemasan pekat. Menyuguhkan aroma kayu ek panggang, karamel lembut, dan sentuhan akhir hangat yang elegan di tenggorokan.
+                        </p>
+                        <div class="space-y-2 border-t border-white/10 pt-4 mb-6 text-xs text-gray-400">
+                            <div class="flex justify-between"><span>Tasting Notes:</span> <span class="text-parchment">Vanilla, Toasted Oak, Honey</span></div>
+                            <div class="flex justify-between"><span>BPOM RI MD:</span> <span class="text-parchment">169622003040</span></div>
+                        </div>
+                        <button onclick="openOrderModal('DPLAVA Whisky (750ml)')" class="w-full py-3.5 rounded-xl bg-amberGold/10 border border-amberGold text-amberGold font-semibold text-sm hover:bg-amberGold hover:text-obsidian transition cursor-pointer">
+                            Tanyakan Ketersediaan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PRODUK 2: DPLAVA BLACK TEA -->
+                <div class="group bg-charcoal border border-amberGold/25 rounded-3xl overflow-hidden flex flex-col justify-between hover:border-amberGold transition duration-500 gold-border-glow">
+                    <div class="p-8 pb-0">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="px-3 py-1 rounded-full bg-emerald-900/40 border border-emerald-500/30 text-emerald-300 text-xs font-semibold tracking-wider">ALC. 40% | 750 ML</span>
+                            <span class="text-xs text-gray-400 font-cinzel">BOTANICAL INFUSION</span>
+                        </div>
+                        <div class="relative h-80 flex items-center justify-center my-4 bottle-backdrop rounded-2xl">
+                            <img src="DP BT.jpg" alt="DPLAVA Black Tea" class="h-72 object-contain transform group-hover:scale-105 transition duration-500 rounded-lg" onerror="this.src='https://placehold.co/300x550/141210/D4AF37?text=DPLAVA+BLACK+TEA'">
+                        </div>
+                    </div>
+
+                    <div class="p-8 pt-4 bg-gradient-to-t from-black/60 to-transparent">
+                        <h3 class="font-cinzel text-2xl font-bold text-white mb-2">DPLAVA Black Tea</h3>
+                        <p class="text-xs text-emerald-400 uppercase tracking-widest mb-4">Aromatic • Crisp • Earthy</p>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-6">
+                            Perpaduan inovatif antara spirit murni berkekuatan 40% dengan kekayaan aroma daun teh hitam pilihan. Menghasilkan profil rasa yang segar, sedikit sepat yang elegan, dan sangat mudah dipadukan.
+                        </p>
+                        <div class="space-y-2 border-t border-white/10 pt-4 mb-6 text-xs text-gray-400">
+                            <div class="flex justify-between"><span>Tasting Notes:</span> <span class="text-parchment">Roasted Black Tea, Floral, Citrus</span></div>
+                            <div class="flex justify-between"><span>Karakter:</span> <span class="text-parchment">Hand Made From Distiller Island</span></div>
+                        </div>
+                        <button onclick="openOrderModal('DPLAVA Black Tea (750ml)')" class="w-full py-3.5 rounded-xl bg-amberGold/10 border border-amberGold text-amberGold font-semibold text-sm hover:bg-amberGold hover:text-obsidian transition cursor-pointer">
+                            Tanyakan Ketersediaan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PRODUK 3: DPLAVA SPICED RUM -->
+                <div class="group bg-charcoal border border-amberGold/25 rounded-3xl overflow-hidden flex flex-col justify-between hover:border-amberGold transition duration-500 gold-border-glow">
+                    <div class="p-8 pb-0">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="px-3 py-1 rounded-full bg-orange-900/40 border border-orange-500/30 text-orange-300 text-xs font-semibold tracking-wider">ALC. 40% | 750 ML</span>
+                            <span class="text-xs text-gray-400 font-cinzel">TROPICAL SPICE</span>
+                        </div>
+                        <div class="relative h-80 flex items-center justify-center my-4 bottle-backdrop rounded-2xl">
+                            <img src="DP SR.jpg" alt="DPLAVA Spiced Rum" class="h-72 object-contain transform group-hover:scale-105 transition duration-500 rounded-lg" onerror="this.src='https://placehold.co/300x550/141210/D4AF37?text=DPLAVA+SPICED+RUM'">
+                        </div>
+                    </div>
+
+                    <div class="p-8 pt-4 bg-gradient-to-t from-black/60 to-transparent">
+                        <h3 class="font-cinzel text-2xl font-bold text-white mb-2">DPLAVA Spiced Rum</h3>
+                        <p class="text-xs text-orange-400 uppercase tracking-widest mb-4">Bold • Warm Spice • Exotic</p>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-6">
+                            Penghormatan atas jalur rempah Nusantara. Spiced Rum dengan infusi rempah-rempah tropis pilihan yang memberikan rasa manis alami gula tebu yang seimbang dengan kehangatan kayu manis dan cengkeh.
+                        </p>
+                        <div class="space-y-2 border-t border-white/10 pt-4 mb-6 text-xs text-gray-400">
+                            <div class="flex justify-between"><span>Tasting Notes:</span> <span class="text-parchment">Cinnamon, Clove, Brown Sugar</span></div>
+                            <div class="flex justify-between"><span>BPOM RI MD:</span> <span class="text-parchment">169622003040</span></div>
+                        </div>
+                        <button onclick="openOrderModal('DPLAVA Spiced Rum (750ml)')" class="w-full py-3.5 rounded-xl bg-amberGold/10 border border-amberGold text-amberGold font-semibold text-sm hover:bg-amberGold hover:text-obsidian transition cursor-pointer">
+                            Tanyakan Ketersediaan
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SIGNATURE COCKTAIL SERVES -->
+    <section id="koktail" class="py-24 bg-charcoal border-t border-amberGold/15">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
+                <div>
+                    <span class="text-xs uppercase tracking-[0.3em] text-amberGold font-semibold">The Art of Serving</span>
+                    <h2 class="font-cinzel text-3xl sm:text-4xl font-bold text-white mt-2">Rekomendasi Racikan Bar</h2>
+                </div>
+                <p class="text-sm text-gray-400 max-w-md">
+                    Sempurna untuk menu unggulan di bar, restoran, *beach club*, maupun perayaan pribadi Anda.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Recipe 1 -->
+                <div class="bg-obsidian p-7 rounded-2xl border border-white/10 hover:border-amberGold/40 transition">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-semibold text-amberGold uppercase tracking-wider">DPLAVA Whisky</span>
+                        <i class="fa-solid fa-whiskey-glass text-amberGold/70"></i>
+                    </div>
+                    <h4 class="font-cinzel text-xl text-white font-semibold mb-2">Bali Sunset Old Fashioned</h4>
+                    <p class="text-xs text-gray-400 mb-4">Klasik dengan sentuhan gula aren Bali.</p>
+                    <ul class="text-sm text-gray-300 space-y-2 border-t border-white/10 pt-4">
+                        <li>• 60 ml <strong>DPLAVA Whisky</strong></li>
+                        <li>• 10 ml Sirup Gula Aren Bali</li>
+                        <li>• 2 dash Angostura Bitters</li>
+                        <li>• Garnish: Kulit jeruk Bali & es batu kristal</li>
+                    </ul>
+                </div>
+
+                <!-- Recipe 2 -->
+                <div class="bg-obsidian p-7 rounded-2xl border border-white/10 hover:border-amberGold/40 transition">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">DPLAVA Black Tea</span>
+                        <i class="fa-solid fa-martini-glass-citrus text-emerald-400/70"></i>
+                    </div>
+                    <h4 class="font-cinzel text-xl text-white font-semibold mb-2">Ubud Mist Highball</h4>
+                    <p class="text-xs text-gray-400 mb-4">Segar, ringan, dan aromatik untuk suasana tropis.</p>
+                    <ul class="text-sm text-gray-300 space-y-2 border-t border-white/10 pt-4">
+                        <li>• 50 ml <strong>DPLAVA Black Tea</strong></li>
+                        <li>• 15 ml Air perasan jeruk nipis segar</li>
+                        <li>• Top up dengan Tonic Water / Soda</li>
+                        <li>• Garnish: Daun mint & irisan lemon</li>
+                    </ul>
+                </div>
+
+                <!-- Recipe 3 -->
+                <div class="bg-obsidian p-7 rounded-2xl border border-white/10 hover:border-amberGold/40 transition">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-semibold text-orange-400 uppercase tracking-wider">DPLAVA Spiced Rum</span>
+                        <i class="fa-solid fa-wine-glass text-orange-400/70"></i>
+                    </div>
+                    <h4 class="font-cinzel text-xl text-white font-semibold mb-2">Kuta Spiced Mule</h4>
+                    <p class="text-xs text-gray-400 mb-4">Perpaduan rempah hangat dan kesegaran jahe.</p>
+                    <ul class="text-sm text-gray-300 space-y-2 border-t border-white/10 pt-4">
+                        <li>• 50 ml <strong>DPLAVA Spiced Rum</strong></li>
+                        <li>• 120 ml Ginger Beer dingin</li>
+                        <li>• 10 ml Jus jeruk nipis</li>
+                        <li>• Garnish: Batang kayu manis & jeruk nipis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KEMITRAAN & PEMESANAN (CONTACT / B2B) -->
+    <section id="kemitraan" class="py-24 bg-obsidian relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="bg-charcoal border border-amberGold/30 rounded-3xl p-8 sm:p-12 gold-border-glow">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <span class="text-xs uppercase tracking-[0.25em] text-amberGold font-semibold">Distribusi & Pemesanan</span>
+                        <h2 class="font-cinzel text-3xl font-bold text-white mt-2 mb-4">Bermitra Bersama DPLAVA</h2>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-6">
+                            Kami terbuka untuk kerja sama distribusi dengan hotel, restoran, bar, *beach club*, toko minuman berizin, maupun pemesanan untuk acara eksklusif.
+                        </p>
+
+                        <div class="space-y-4 text-sm">
+                            <div class="flex items-start gap-3">
+                                <i class="fa-solid fa-location-dot text-amberGold mt-1"></i>
+                                <div>
+                                    <p class="font-semibold text-white">Diproduksi Oleh:</p>
+                                    <p class="text-gray-400">UD. Tri Hita Karya — Badung, Bali, Indonesia</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fa-solid fa-shield-halved text-amberGold mt-1"></i>
+                                <div>
+                                    <p class="font-semibold text-white">Kepatuhan Regulasi:</p>
+                                    <p class="text-gray-400">Minuman Beralkohol Golongan C (40% V/V) • Terdaftar BPOM RI</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Inquiry Interaktif -->
+                    <form onsubmit="handleFormSubmit(event)" class="bg-obsidian/90 p-6 sm:p-8 rounded-2xl border border-white/10 space-y-4">
+                        <h3 class="font-cinzel text-lg font-semibold text-white mb-2">Kirim Permintaan Penawaran</h3>
+                        
+                        <div>
+                            <label class="block text-xs text-gray-400 uppercase tracking-wider mb-1.5">Nama Lengkap / Perusahaan</label>
+                            <input type="text" id="senderName" required placeholder="Contoh: Bli Made / Sunset Beach Club" class="w-full px-4 py-3 rounded-xl bg-charcoal border border-white/15 text-white text-sm focus:outline-none focus:border-amberGold">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-gray-400 uppercase tracking-wider mb-1.5">Kategori Kebutuhan</label>
+                            <select id="inquiryType" class="w-full px-4 py-3 rounded-xl bg-charcoal border border-white/15 text-white text-sm focus:outline-none focus:border-amberGold">
+                                <option value="Kemitraan Bar / Restoran / Hotel">Kemitraan Bar / Restoran / Hotel (HoReCa)</option>
+                                <option value="Distributor / Reseller Resmi">Distributor / Reseller Resmi</option>
+                                <option value="Pembelian Acara / Pribadi (21+)">Pembelian Acara / Pribadi (21+)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-gray-400 uppercase tracking-wider mb-1.5">Produk & Pesan</label>
+                            <textarea id="inquiryMessage" rows="3" required placeholder="Tuliskan varian yang diminati (Whisky, Black Tea, Spiced Rum) dan estimasi jumlah..." class="w-full px-4 py-3 rounded-xl bg-charcoal border border-white/15 text-white text-sm focus:outline-none focus:border-amberGold"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amberGold to-yellow-600 text-obsidian font-semibold text-sm hover:brightness-110 transition cursor-pointer flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                            <span>Hubungi Tim Penjualan</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER & PERINGATAN KESEHATAN -->
+    <footer class="bg-black border-t border-white/10 pt-14 pb-10 text-center sm:text-left">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6 pb-10 border-b border-white/10">
+                <div>
+                    <span class="font-cinzel font-bold text-2xl tracking-[0.2em] text-white">DPLAVA</span>
+                    <span class="block text-xs tracking-[0.3em] text-amberGold uppercase mt-1">Distillery Company • Bali</span>
+                </div>
+                <div class="flex gap-4">
+                    <a href="#koleksi" class="w-10 h-10 rounded-full bg-charcoal border border-white/10 flex items-center justify-center text-gray-400 hover:text-amberGold hover:border-amberGold transition">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="#kemitraan" class="w-10 h-10 rounded-full bg-charcoal border border-white/10 flex items-center justify-center text-gray-400 hover:text-amberGold hover:border-amberGold transition">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                    <a href="#kemitraan" class="w-10 h-10 rounded-full bg-charcoal border border-white/10 flex items-center justify-center text-gray-400 hover:text-amberGold hover:border-amberGold transition">
+                        <i class="fa-regular fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mandatory Alcohol Warning Banner -->
+            <div class="mt-8 p-4 rounded-xl bg-charcoal/70 border border-white/10 text-center">
+                <p class="text-xs font-semibold text-amberGold tracking-wider uppercase mb-1">
+                    DIBAWAH UMUR 21 TAHUN DAN WANITA HAMIL DILARANG MINUM
+                </p>
+                <p class="text-[11px] text-gray-400">
+                    Diproduksi oleh UD. Tri Hita Karya, Badung, Bali - Indonesia. Minuman Beralkohol (Mengandung Alkohol ± 40% V/V). Nikmati secara bijak dan bertanggung jawab.
+                </p>
+            </div>
+
+            <div class="mt-6 text-center text-xs text-gray-500">
+                &copy; 2026 DPLAVA Distillery Company. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- TOAST / CUSTOM MESSAGE BOX -->
+    <div id="customToast" class="fixed bottom-6 right-6 z-50 hidden max-w-sm bg-charcoal border border-amberGold text-parchment p-4 rounded-2xl shadow-2xl transition-all">
+        <div class="flex items-start gap-3">
+            <i class="fa-solid fa-circle-check text-amberGold text-xl mt-0.5"></i>
+            <div>
+                <h4 class="font-semibold text-sm text-white" id="toastTitle">Pesan Terkirim</h4>
+                <p class="text-xs text-gray-300 mt-1" id="toastBody">Terima kasih telah menghubungi DPLAVA Distillery Company.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logika Age Gate
+        function verifyAge(isAdult) {
+            const modal = document.getElementById('ageGateModal');
+            const errorMsg = document.getElementById('ageErrorMsg');
+            
+            if (isAdult) {
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 400);
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Pilih produk langsung ke form pemesanan
+        function openOrderModal(productName) {
+            const messageInput = document.getElementById('inquiryMessage');
+            messageInput.value = `Halo DPLAVA, saya tertarik untuk menanyakan daftar harga dan ketersediaan produk ${productName}.`;
+            document.getElementById('kemitraan').scrollIntoView({ behavior: 'smooth' });
+            messageInput.focus();
+        }
+
+        // Handle Form Submit dengan Notifikasi Kustom (Tanpa alert())
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('senderName').value;
+            const type = document.getElementById('inquiryType').value;
+            const msg = document.getElementById('inquiryMessage').value;
+
+            showToast(
+                'Permintaan Berhasil Disiapkan',
+                `Terima kasih ${name}. Tim distribusi DPLAVA siap memproses pertanyaan Anda mengenai ${type}.`
+            );
+
+            // Simulasi format pesan WhatsApp siap kirim (bisa dihubungkan ke nomor WA resmi Anda)
+            console.log(`Inquiry DPLAVA | Nama: ${name} | Kategori: ${type} | Pesan: ${msg}`);
+            e.target.reset();
+        }
+
+        function showToast(title, body) {
+            const toast = document.getElementById('customToast');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastBody').innerText = body;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
